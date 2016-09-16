@@ -1,4 +1,4 @@
-let do_something = (text) => {
+let do_something = text => {
   // do something
   return text[0]
 }
@@ -37,7 +37,7 @@ module.exports = {
     },
     date: {
       select: 'span.date',
-      format: (date) => new Date(date[0])
+      format: date => new Date(date[0])
     },
     image: {
       select: 'img@src',

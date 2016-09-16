@@ -5,6 +5,7 @@ const hash = require('object-hash')
 const osmosis = require('osmosis')
 
 class Feed {
+
   constructor (opts) {
     this.opts = opts
     this.items = []
@@ -21,26 +22,29 @@ class Feed {
       .data(this._data.bind(this))
       .done(this._done.bind(this))
   }
+
   fetch (callback) {
     this.callback = callback
     this.request.run()
   }
-  _data (data) {
+
+  _data (obj) {
     let item = {
       date: new Date,
-      guid: hash(data)
+      guid: hash.MD5(obj)
     }
 
     if (this.cache.includes(item.guid)) return
 
-    for (let field in data) {
+    for (let field in obj) {
       let rule = this.opts.fields[field]
-      let value = [data[field]]
+      let value = [obj[field]]
 
       if ('match' in rule) {
         value = value[0].match(rule.match)
         if (!value) return
       }
+
       if ('format' in rule) {
         try {
           value = [rule.format(value)]
@@ -54,18 +58,24 @@ class Feed {
       }
       item[field] = value[0]
     }
+
     item.delay = item.date - Date.now()
 
     this.items.push(item)
     this.cache.push(item.guid)
   }
+
   _done () {
     let items = this.items.slice(0, this.opts.feed.limit)
-    if (this.opts.feed.reverse) items.reverse()
+    if (this.opts.feed.reverse) {
+      items.reverse()
+    }
 
     let feed = new atom(this.opts.feed)
     for (let item of items) {
-      if (item.delay <= 0) feed.addItem(item)
+      if (item.delay <= 0) {
+        feed.addItem(item)
+      }
     }
 
     let output = {
@@ -74,30 +84,42 @@ class Feed {
     }
     this.callback(output)
   }
+
 }
 
 class Manager {
+
   constructor (opts) {
     this.opts = opts
     this.feed = new Feed(opts)
     this.cbs = [this._delay.bind(this)]
   }
+
   data (func) {
     this.cbs.push(func)
     return this
   }
+
   start () {
     this.timer = later.setInterval(this._fetch.bind(this)(),
       later.parse.text(this.opts.fetch))
     return this
   }
+
+  stop () {
+    this.timer.clear()
+    clearTimeout(this.scheduled)
+  }
+
   _fetch () {
-    let callback = (obj) => {
+    let callback = obj => {
       for (let cb of this.cbs) cb(obj)
     }
+
     this.feed.fetch(callback)
     return this._fetch
   }
+
   _delay (feed) {
     for (let item of feed.items) {
       if (item.delay > 0) {
@@ -105,11 +127,16 @@ class Manager {
       }
     }
   }
+
 }
 
-let instance = new Manager(require(process.argv[2]))
-  .data((feed) => fs.writeFileSync(process.argv[3], feed.atom))
+let config = require(process.argv[2])
+let callback = feed => fs.writeFileSync(process.argv[3], feed.atom)
+
+let instance = new Manager(config)
+  .data(callback)
   .start()
+
 if (process.argv.length >= 5) {
-  setTimeout(process.exit, process.argv[4])
+  setTimeout(instance.stop.bind(instance), process.argv[4])
 }
