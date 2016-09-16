@@ -1,8 +1,3 @@
-let do_something = text => {
-  // do something
-  return text[0]
-}
-
 module.exports = {
   fetch: 'every day at 12:00 pm',
   feed: {
@@ -32,8 +27,7 @@ module.exports = {
       match: /(Hello|World)/
     },
     description: {
-      select: 'p.description',
-      format: do_something
+      select: 'p.description'
     },
     date: {
       select: 'span.date',

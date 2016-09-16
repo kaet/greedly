@@ -101,6 +101,7 @@ class Manager {
   }
 
   start () {
+    later.date.localTime()
     this.timer = later.setInterval(this._fetch.bind(this)(),
       later.parse.text(this.opts.fetch))
     return this
