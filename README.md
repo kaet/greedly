@@ -10,12 +10,7 @@ $ cd greedly && npm install
 ```
 
 You may run into issues with the `libxmljs` dependency when running Greedly.
-This seems to fix it;
-
-```
-$ cd node_modules/osmosis/node_modules/libxmljs-dom/node_modules/libxmljs
-$ node-gyp rebuild
-```
+The issue can be fixed by navigating to `greedly/node_modules/osmosis/node_modules/libxmljs-dom/node_modules/libxmljs` and running `node-gyp rebuild`.
 
 ## Usage
 
@@ -35,4 +30,4 @@ $ node greedly.js <config_path> <output_path> [<timeout>]
 $ node greedly.js public/example.js public/example.atom 1500
 ```
 
-_Note that due to the lack of any fault tolerance or logging, it's recommended to use a supervisor such as [forever](https://github.com/foreverjs/forever)._
+_Note that due to the lack of any fault tolerance or logging, it's recommended to use a supervisor such as as [forever](https://github.com/foreverjs/forever)._
