@@ -133,10 +133,10 @@ class Manager {
 
 }
 
-[, config, output, timeout] = process.argv
-let output = fs.createWriteStream(output)
+let [,, config, output, timeout] = process.argv
+let stream = fs.createWriteStream(output)
 let instance = new Manager(require(config))
-  .data(feed => output.write(feed.atom))
+  .data(feed => stream.write(feed.atom))
   .start()
 if (timeout) {
   setTimeout(process.exit, timeout)
