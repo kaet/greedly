@@ -1,3 +1,5 @@
+'use strict'
+
 const later = require('later')
     , atom = require('feed')
     , fs = require('fs')
@@ -56,10 +58,12 @@ class Feed {
           value = [string]
         }
       }
+
       item[field] = value[0]
     }
+
     item.delay = item.date - Date.now()
-    item.id ||= item.link
+    item.id = item.id || item.link
 
     this.items.push(item)
     this.cache.push(item.guid)

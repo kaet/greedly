@@ -9,9 +9,12 @@ $ git clone https://github.com/kaet/greedly.git
 $ cd greedly && npm install
 ```
 
+You may run into issues with the `libxmljs` dependency when running Greedly.
+The issue can be fixed by navigating to `greedly/node_modules/osmosis/node_modules/libxmljs-dom/node_modules/libxmljs` and running `node-gyp rebuild`.
+
 ## Usage
 
-Greedly is run from the command line and takes a JS config file as input. An example of the configuration options can be found in [`public/example.js`](https://github.com/kaet/greedly/blob/master/public/example.js).
+Greedly is run from the command line and takes a JS config file as input. An annotated example of the configuration options can be found in [`public/example.js`](https://github.com/kaet/greedly/blob/master/public/example.js).
 
 ```
 $ node greedly.js <config_path> <output_path> [<timeout>]
@@ -26,3 +29,5 @@ $ node greedly.js <config_path> <output_path> [<timeout>]
 ```
 $ node greedly.js public/example.js public/example.atom 1500
 ```
+
+_Note that due to the lack of any fault tolerance or logging, it's recommended to use a supervisor such as as [forever](https://github.com/foreverjs/forever)._
