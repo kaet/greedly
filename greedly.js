@@ -58,7 +58,6 @@ class Feed {
       }
       item[field] = value[0]
     }
-
     item.delay = item.date - Date.now()
 
     this.items.push(item)
@@ -120,7 +119,6 @@ class Manager {
     let callback = obj => {
       for (let cb of this.cbs) cb(obj)
     }
-
     this.feed.fetch(callback)
     return this._fetch
   }
@@ -135,13 +133,11 @@ class Manager {
 
 }
 
-let config = require(process.argv[2])
-let callback = feed => fs.writeFileSync(process.argv[3], feed.atom)
-
-let instance = new Manager(config)
-  .data(callback)
+[, config, output, timeout] = process.argv
+let output = fs.createWriteStream(output)
+let instance = new Manager(require(config))
+  .data(feed => output.write(feed.atom))
   .start()
-
-if (process.argv.length >= 5) {
-  setTimeout(instance.stop.bind(instance), process.argv[4])
+if (timeout) {
+  setTimeout(process.exit, timeout)
 }
