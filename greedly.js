@@ -66,7 +66,11 @@ class Feed {
   }
 
   _done () {
-    let items = this.items.slice(0, this.opts.feed.limit)
+    let limit = this.opts.feed.limit < 1
+      ? this.items.length
+      : this.opts.feed.limit
+
+    let items = this.items.slice(0, limit)
     if (this.opts.feed.reverse) {
       items.reverse()
     }
