@@ -1,8 +1,8 @@
 const later = require('later')
-const atom = require('feed')
-const fs = require('fs')
-const hash = require('object-hash')
-const osmosis = require('osmosis')
+    , atom = require('feed')
+    , fs = require('fs')
+    , hash = require('object-hash')
+    , osmosis = require('osmosis')
 
 class Feed {
 
@@ -29,10 +29,10 @@ class Feed {
   }
 
   _data (obj) {
-    let item = {
-      date: new Date,
-      guid: hash.MD5(obj)
-    }
+    let item =
+      { date: new Date
+      , guid: hash.MD5(obj)
+      }
 
     if (this.cache.includes(item.guid)) return
 
@@ -59,6 +59,7 @@ class Feed {
       item[field] = value[0]
     }
     item.delay = item.date - Date.now()
+    item.id ||= item.link
 
     this.items.push(item)
     this.cache.push(item.guid)
@@ -81,10 +82,10 @@ class Feed {
       }
     }
 
-    let output = {
-      items: this.items,
-      atom: feed.render('atom-1.0')
-    }
+    let output =
+      { items: this.items
+      , atom: feed.render('atom-1.0')
+      }
     this.callback(output)
   }
 

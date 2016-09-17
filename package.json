@@ -1,7 +1,7 @@
 {
   "name": "greedly",
   "version": "1.0.0",
-  "description": "Extensible Atom feed generator.",
+  "description": "Simple, extensible content scraper for Atom feed creation.",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/kaet/greedly.git"
