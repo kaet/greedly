@@ -15,7 +15,6 @@
   "dependencies": {
     "feed": "^0.3.0",
     "later": "^1.2.0",
-    "object-hash": "^1.1.4",
     "osmosis": "^1.1.0"
   }
 }

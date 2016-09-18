@@ -3,7 +3,7 @@
 const later = require('later')
     , atom = require('feed')
     , fs = require('fs')
-    , hash = require('object-hash')
+    , crypto = require('crypto')
     , osmosis = require('osmosis')
 
 class Feed {
@@ -31,12 +31,17 @@ class Feed {
   }
 
   _data (obj) {
-    let item =
-      { date: new Date
-      , guid: hash.MD5(obj)
-      }
+    let item = { date: new Date }
 
-    if (this.cache.includes(item.guid)) return
+    let concat = ''
+    for (let field in obj) {
+      concat += obj[field]
+    }
+    item.md5 = crypto.createHash('md5')
+      .update(concat)
+      .digest('hex')
+
+    if (this.cache.includes(item.md5)) return
 
     for (let field in obj) {
       let rule = this.opts.fields[field]
@@ -66,7 +71,7 @@ class Feed {
     item.id = item.id || item.link
 
     this.items.push(item)
-    this.cache.push(item.guid)
+    this.cache.push(item.md5)
   }
 
   _done () {
