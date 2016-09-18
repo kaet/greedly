@@ -9,14 +9,7 @@ $ git clone https://github.com/kaet/greedly.git
 $ cd greedly && npm install
 ```
 
-You may run into issues with the `libxmljs` dependency when running Greedly.
-This seems to fix it;
-
-```
-$ npm install -g node-gyp
-$ cd node_modules/osmosis/node_modules/libxmljs-dom/node_modules/libxmljs
-$ node-gyp rebuild
-```
+Note that you'll need the `build-essential` package to compile the `libxmljs` dependency.
 
 ## Usage
 
@@ -36,4 +29,4 @@ $ node greedly.js <config_path> <output_path> [<timeout>]
 $ node greedly.js public/example.js public/example.atom 1500
 ```
 
-_Note that due to the lack of any fault tolerance or logging, it's recommended to use a supervisor such as [forever](https://github.com/foreverjs/forever)._
+Note that due to the lack of any fault tolerance or logging, it's recommended to use a supervisor such as [forever](https://github.com/foreverjs/forever).
