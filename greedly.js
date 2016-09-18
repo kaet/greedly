@@ -130,7 +130,7 @@ class Manager {
       for (let cb of this.cbs) cb(obj)
     }
     this.feed.fetch(callback)
-    return this._fetch
+    return this._fetch.bind(this)
   }
 
   _delay (feed) {
