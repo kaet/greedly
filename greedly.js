@@ -144,9 +144,8 @@ class Manager {
 }
 
 let [,, config, output, timeout] = process.argv
-let stream = fs.createWriteStream(output)
 let instance = new Manager(require(config))
-  .data(feed => stream.write(feed.atom))
+  .data(feed => fs.writeFileSync(output, feed.atom))
   .start()
 if (timeout) {
   setTimeout(process.exit, timeout)
