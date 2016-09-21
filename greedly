@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-const Manager = require('./greedly')
+const Manager = require('./greedly.js').Manager
     , fs = require('fs')
     , path = require('path')
 
@@ -9,7 +9,9 @@ let [,, config, output, timeout] = process.argv
 let callback = feed => {
   fs.writeFileSync(path.resolve(output), feed.atom)
 }
-let instance = new Manager(require(config))
+config = require(path.resolve(config))
+
+let instance = new Manager(config)
   .data(callback)
   .start()
 
