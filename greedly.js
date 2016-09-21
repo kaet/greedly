@@ -2,7 +2,6 @@
 
 const later = require('later')
     , atom = require('feed')
-    , fs = require('fs')
     , crypto = require('crypto')
     , osmosis = require('osmosis')
 
@@ -143,10 +142,4 @@ class Manager {
 
 }
 
-let [,, config, output, timeout] = process.argv
-let instance = new Manager(require(config))
-  .data(feed => fs.writeFileSync(output, feed.atom))
-  .start()
-if (timeout) {
-  setTimeout(process.exit, timeout)
-}
+module.exports = Manager

@@ -1,0 +1,18 @@
+#!/usr/bin/env node
+
+const Manager = require('./greedly')
+    , fs = require('fs')
+    , path = require('path')
+
+let [,, config, output, timeout] = process.argv
+
+let callback = feed => {
+  fs.writeFileSync(path.resolve(output), feed.atom)
+}
+let instance = new Manager(require(config))
+  .data(callback)
+  .start()
+
+if (timeout) {
+  setTimeout(process.exit, timeout)
+}

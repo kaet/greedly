@@ -7,6 +7,7 @@ Greedly is a very simple wrapper around [Osmosis](https://github.com/rchipka/nod
 ```
 $ git clone https://github.com/kaet/greedly.git
 $ cd greedly && npm install
+$ chmod +x ./greedly
 ```
 
 Note that you'll need the `build-essential` package to compile the `libxmljs` dependency.
@@ -16,7 +17,7 @@ Note that you'll need the `build-essential` package to compile the `libxmljs` de
 Greedly is run from the command line and takes a JS config file as input. An annotated example of the configuration options can be found in [`public/example.js`](https://github.com/kaet/greedly/blob/master/public/example.js).
 
 ```
-$ node greedly.js <config_path> <output_path> [<timeout>]
+$ ./greedly <config_path> <output_path> [<timeout>]
 ```
 
 - `config_path` Path to the JS config file.
@@ -26,7 +27,7 @@ $ node greedly.js <config_path> <output_path> [<timeout>]
 **Example**
 
 ```
-$ node greedly.js public/example.js public/example.atom 1500
+$ ./greedly public/example.js public/example.atom 1500
 ```
 
 Note that due to the lack of any fault tolerance or logging, it's recommended to use a supervisor such as [forever](https://github.com/foreverjs/forever).
