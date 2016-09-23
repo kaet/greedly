@@ -114,7 +114,8 @@ class Manager {
 
   start () {
     later.date.localTime()
-    this.timer = later.setInterval(this._fetch.bind(this)(),
+    this.timer = later.setInterval(
+      this._fetch.bind(this)(),
       later.parse.text(this.opts.fetch))
     return this
   }
@@ -135,7 +136,8 @@ class Manager {
   _delay (feed) {
     for (let item of feed.items) {
       if (item.delay > 0) {
-        this.scheduled = setTimeout(this._fetch, item.delay)
+        this.scheduled = setTimeout(
+          this._fetch.bind(this), item.delay)
       }
     }
   }
