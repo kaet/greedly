@@ -105,6 +105,8 @@ class Manager {
     this.opts = opts
     this.feed = new Feed(opts)
     this.cbs = [this._delay.bind(this)]
+    this.sched = later.schedule(
+      later.parse.text(opts.fetch))
   }
 
   data (func) {
@@ -115,14 +117,13 @@ class Manager {
   start () {
     later.date.localTime()
     this.timer = later.setInterval(
-      this._fetch.bind(this)(),
-      later.parse.text(this.opts.fetch))
+      this._fetch.bind(this)(), this.sched)
     return this
   }
 
   stop () {
     this.timer.clear()
-    clearTimeout(this.scheduled)
+    clearTimeout(this.forceFetch)
   }
 
   _fetch () {
@@ -135,8 +136,10 @@ class Manager {
 
   _delay (feed) {
     for (let item of feed.items) {
-      if (item.delay > 0) {
-        this.scheduled = setTimeout(
+      if (item.delay <= 0) continue
+
+      if (item.date - this.sched.next(1) < 0) {
+        this.forceFetch = setTimeout(
           this._fetch.bind(this), item.delay)
       }
     }
