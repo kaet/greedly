@@ -105,8 +105,7 @@ class Manager {
     this.opts = opts
     this.feed = new Feed(opts)
     this.cbs = [this._delay.bind(this)]
-    this.sched = later.schedule(
-      later.parse.text(opts.fetch))
+    this.sched = later.parse.text(opts.fetch)
   }
 
   data (func) {
@@ -138,7 +137,10 @@ class Manager {
     for (let item of feed.items) {
       if (item.delay <= 0) continue
 
-      if (item.date - this.sched.next(1) < 0) {
+      let nextUpdate = later.schedule(this.sched)
+        .next(1, item.date) - Date.now()
+
+      if (item.delay < nextUpdate) {
         this.forceFetch = setTimeout(
           this._fetch.bind(this), item.delay)
       }
