@@ -9,15 +9,14 @@ module.exports =
    * https://tools.ietf.org/html/rfc4287#section-4.1.1
    *
    * Required: title, id, author { name }, link_alternate
-   * Recommended: link_self, subtitle
+   * Available: link_self, link_related, subtitle, contributor,
+   *            logo, icon, rights, generator
    */
   { title: 'Example Feed'
   , subtitle: 'Example feed generated using Greedly'
-  , link_self: 'http://example.com/feed.atom'
   , link_alternate: 'http://example.com'
   , id: 'http://example.com'
   , author: { name: 'John Doe' }
-  , generator: 'Greedly'
 
   // (Optional) Limit the number of items that are fetched per update.
   // Useful for only selecting most recent items in an ordered list.
@@ -72,16 +71,16 @@ module.exports =
      *                                      format: text => text[0] + (new Date).toString()
      *   }
      *
-     * Required fields: link_alternate, title
-     * Available fields: id, content, summary
-     *   update|[publish] (defaults to Date.now, should return a valid Date object)
+     * Required fields: id, title, summary|content
+     * Available fields: link_alternate, link_enclosure, publish (must return Date object)
+     *   author, contributor update (defaults to Date.now, should return a valid Date object)
      *
-     * Note: Greedly will not publish an item if the 'date' field is dated in
+     * Note: Greedly will not publish an item if the 'update' field is dated in
      *   the future, and will instead delay publication until that time. This
      *   feature can be used to generate 'notifications', for example for an
      *   event. E.g.;
      *
-     *     date: {
+     *     update: {
      *       select: 'span.event_date',
      *       format: date => {
      *         // publish the item 12 hours before the event date
@@ -90,7 +89,11 @@ module.exports =
      *       }
      *     }
      */
-  { link_alternate:
+  { id:
+    { select: 'a@href'
+    , format: 'http://example.com/%0'
+    }
+  , link_alternate:
     { select: 'a@href'
     , format: 'http://example.com/%0'
     }

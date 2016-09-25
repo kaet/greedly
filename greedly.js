@@ -1,7 +1,7 @@
 'use strict'
 
 const later = require('later')
-    , atom = require('./libxmljs-atom')
+    , atom = require('./atom')
     , crypto = require('crypto')
     , osmosis = require('osmosis')
 
@@ -31,7 +31,7 @@ class Feed {
   }
 
   _data (obj) {
-    let item = { date: new Date }
+    let item = { update: new Date }
 
     let concat = ''
     for (let field in obj) {
@@ -66,9 +66,7 @@ class Feed {
 
       item[field] = value[0]
     }
-
-    item.delay = item.date - Date.now()
-    item.id = item.id || item.link
+    item.delay = item.update - Date.now()
 
     this.items.push(item)
     this.cache.push(item.md5)
@@ -123,7 +121,7 @@ class Manager {
 
   stop () {
     this.timer.clear()
-    clearTimeout(this.forceFetch)
+    clearTimeout(this.forced)
   }
 
   _fetch () {
@@ -138,13 +136,11 @@ class Manager {
     for (let item of feed.items) {
       if (item.delay <= 0) continue
 
-      let nextUpdate = later.schedule(this.sched)
-        .next(1, item.date) - Date.now()
+      let next = later.schedule(this.sched)
+        .next(1, item.update) - Date.now()
 
-      if (item.delay < nextUpdate) {
-        this.forceFetch = setTimeout(
+      if (item.delay < next) this.forced = setTimeout(
           this._fetch.bind(this), item.delay)
-      }
     }
   }
 
