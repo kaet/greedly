@@ -31,7 +31,7 @@ class Feed {
   }
 
   _data (obj) {
-    let item = { update: new Date }
+    let item = { updated: new Date }
 
     let concat = ''
     for (let field in obj) {
@@ -66,7 +66,7 @@ class Feed {
 
       item[field] = value[0]
     }
-    item.delay = item.update - Date.now()
+    item.delay = item.updated - Date.now()
 
     this.items.push(item)
     this.cache.push(item.md5)
@@ -137,7 +137,7 @@ class Manager {
       if (item.delay <= 0) continue
 
       let next = later.schedule(this.sched)
-        .next(1, item.update) - Date.now()
+        .next(1, item.updated) - Date.now()
 
       if (item.delay < next) this.forced = setTimeout(
           this._fetch.bind(this), item.delay)

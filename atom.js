@@ -44,7 +44,7 @@ class AtomFeed {
         , icon: ['common', opts.icon]
         , rights: ['text', opts.rights]
         , generator: ['common', opts.generator]
-        }
+      })
   }
 
   entry (item) {
@@ -68,7 +68,7 @@ class AtomFeed {
       let value = data[field][1]
       let construct = data[field][0]
 
-      if (!value) return
+      if (!value) continue
       if (value instanceof Error) throw value
       if (!(value instanceof Array)) value = [value]
 
@@ -76,7 +76,7 @@ class AtomFeed {
     }
   }
 
-  toString () { return this.root.toString() }
+  toString () { return this.document.toString() }
 }
 
 module.exports = AtomFeed

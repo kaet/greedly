@@ -73,14 +73,14 @@ module.exports =
      *
      * Required fields: id, title, summary|content
      * Available fields: link_alternate, link_enclosure, publish (must return Date object)
-     *   author, contributor update (defaults to Date.now, should return a valid Date object)
+     *   author, contributor, updated (defaults to Date.now, should return a valid Date object)
      *
      * Note: Greedly will not publish an item if the 'update' field is dated in
      *   the future, and will instead delay publication until that time. This
      *   feature can be used to generate 'notifications', for example for an
      *   event. E.g.;
      *
-     *     update: {
+     *     updated: {
      *       select: 'span.event_date',
      *       format: date => {
      *         // publish the item 12 hours before the event date
@@ -102,7 +102,7 @@ module.exports =
     , match: /(Article|Amazing)/
     }
   , summary: { select: 'p.description' }
-  , update:
+  , updated:
     { select: 'span.date'
     , format: date => new Date(date[0])
     }
