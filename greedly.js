@@ -1,7 +1,7 @@
 'use strict'
 
 const later = require('later')
-    , atom = require('feed')
+    , atom = require('./libxmljs-atom')
     , crypto = require('crypto')
     , osmosis = require('osmosis')
 
@@ -17,11 +17,12 @@ class Feed {
       structure[field] = opts.fields[field].select
     }
 
-    this.request = new osmosis(opts.feed.link, opts.feed.request)
-      .find(opts.feed.root)
-      .set(structure)
-      .data(this._data.bind(this))
-      .done(this._done.bind(this))
+    this.request = new osmosis(opts.feed.link_alternate
+      , opts.feed.request)
+        .find(opts.feed.root)
+        .set(structure)
+        .data(this._data.bind(this))
+        .done(this._done.bind(this))
   }
 
   fetch (callback) {
@@ -86,13 +87,13 @@ class Feed {
     let feed = new atom(this.opts.feed)
     for (let item of items) {
       if (item.delay <= 0) {
-        feed.addItem(item)
+        feed.entry(item)
       }
     }
 
     let output =
       { items: this.items
-      , atom: feed.render('atom-1.0')
+      , atom: feed.toString()
       }
     this.callback(output)
   }
