@@ -9,7 +9,6 @@ class Feed {
 
   constructor (opts) {
     this.opts = opts
-    this.items = []
     this.cache = []
 
     let structure = {}
@@ -26,6 +25,7 @@ class Feed {
   }
 
   fetch (callback) {
+    this.items = []
     this.callback = callback
     this.request.run()
   }
