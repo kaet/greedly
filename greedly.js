@@ -9,7 +9,7 @@ class Feed {
 
   constructor (opts) {
     this.opts = opts
-    this.cache = []
+    this.pubcache = []
 
     let structure = {}
     for (let field in opts.fields) {
@@ -41,7 +41,7 @@ class Feed {
       .update(concat)
       .digest('hex')
 
-    if (this.cache.includes(item.md5)) return
+    if (this.pubcache.includes(item.md5)) return
 
     for (let field in obj) {
       let rule = this.opts.fields[field]
@@ -67,9 +67,10 @@ class Feed {
       item[field] = value[0]
     }
     item.delay = item.updated - Date.now()
+    item.publish = item.delay <= 0 ? true : false
 
+    if (item.publish) this.pubcache.push(item.md5)
     this.items.push(item)
-    this.cache.push(item.md5)
   }
 
   _done () {
@@ -84,9 +85,7 @@ class Feed {
 
     let feed = new atom(this.opts.feed)
     for (let item of items) {
-      if (item.delay <= 0) {
-        feed.entry(item)
-      }
+      if (item.publish) feed.entry(item)
     }
 
     let output =
@@ -134,7 +133,7 @@ class Manager {
 
   _delay (feed) {
     for (let item of feed.items) {
-      if (item.delay <= 0) continue
+      if (item.publish) continue
 
       let next = later.schedule(this.sched)
         .next(1, item.updated) - Date.now()

@@ -1,13 +1,13 @@
 # Greedly
 
-Greedly is a very simple wrapper around [Osmosis](https://github.com/rchipka/node-osmosis) and [Later](https://github.com/bunkat/later) that generates Atom feeds for web services that do not offer their own, on a schedule. It includes a basic hook system to operate on retrieved data.
+Greedly is a very simple wrapper around [Osmosis](https://github.com/rchipka/node-osmosis) and [Later](https://github.com/bunkat/later) that generates Atom feeds for web services that do not offer their own, on a schedule. It offers flexible configuration for scraping, pruning and formatting data, as well as delayed
+publication of items.
 
 ## Installation
 
 ```
 $ git clone https://github.com/kaet/greedly.git
 $ cd greedly && npm install
-$ chmod +x ./greedly
 ```
 
 Note that you'll need the `build-essential` package to compile the `libxmljs` dependency.
