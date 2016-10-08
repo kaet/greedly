@@ -5,11 +5,13 @@ const later = require('later')
     , crypto = require('crypto')
     , osmosis = require('osmosis')
 
+Array.prototype.
+
 class Feed {
 
   constructor (opts) {
     this.opts = opts
-    this.pubcache = []
+    this.cache = []
 
     let structure = {}
     for (let field in opts.fields) {
@@ -41,7 +43,7 @@ class Feed {
       .update(concat)
       .digest('hex')
 
-    if (this.pubcache.includes(item.md5)) return
+    if (this.cache.includes(item.md5)) return
 
     for (let field in obj) {
       let rule = this.opts.fields[field]
@@ -69,8 +71,8 @@ class Feed {
     item.delay = item.updated - Date.now()
     item.publish = item.delay <= 0 ? true : false
 
-    if (item.publish) this.pubcache.push(item.md5)
-    this.items.push(item)
+    if (item.publish) this.cache.push(item.md5)
+    this.item(item)
   }
 
   _done () {
@@ -93,6 +95,15 @@ class Feed {
       , atom: feed.toString()
       }
     this.callback(output)
+  }
+
+  item (obj) {
+    this.items.push(obj)
+    if (this.opts.ttl > 0) {
+      setTimeout(() =>
+        this.items.splice(this.items.indexOf(obj), 1),
+        this.opts.ttl)
+    }
   }
 
 }
