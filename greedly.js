@@ -5,8 +5,6 @@ const later = require('later')
     , crypto = require('crypto')
     , osmosis = require('osmosis')
 
-Array.prototype.
-
 class Feed {
 
   constructor (opts) {
