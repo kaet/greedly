@@ -98,9 +98,8 @@ class Feed {
   item (obj) {
     this.items.push(obj)
     if (this.opts.ttl > 0) {
-      setTimeout(() =>
-        this.items.splice(this.items.indexOf(obj), 1),
-        this.opts.ttl)
+      setTimeout(this.items.splice, this.opts.ttl
+        , this.items.indexOf(obj), 1).unref()
     }
   }
 

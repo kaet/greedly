@@ -16,5 +16,5 @@ let instance = new Manager(config)
   .start()
 
 if (timeout) {
-  setTimeout(process.exit, timeout)
+  setTimeout(instance.stop.bind(instance), timeout)
 }
