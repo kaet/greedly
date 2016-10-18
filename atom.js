@@ -17,11 +17,11 @@ class AtomFeed {
           root.node(node, date.toISOString()).parent()
       , link: (root, rel, href) =>
           root.node('link').attr({ rel: rel.slice(5), href }).parent()
-      , person: (root, type, person) => {
-          node = root.node(type)
-          node.node('name', person.name).parent()
-          if (person.email) node.node('email', person.email).parent()
-          if (person.uri) node.node('uri', person.uri).parent()
+      , person: (root, node, person) => {
+          root = root.node(node)
+          root.node('name', person.name).parent()
+          if (person.email) root.node('email', person.email).parent()
+          if (person.uri) root.node('uri', person.uri).parent()
         }
       }
     this.feed(opts)
