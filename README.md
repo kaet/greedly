@@ -7,10 +7,11 @@ publication of items.
 
 ```
 $ git clone https://github.com/kaet/greedly.git
-$ cd greedly && npm install
+$ cd greedly
+$ npm install
 ```
 
-Note that you'll need the `build-essential` package to compile the `libxmljs` dependency.
+Note that you may need to install build tools (i.e., `gcc-c++` and `make`) to compile the native `libxmljs` dependency.
 
 ## Usage
 
@@ -30,4 +31,4 @@ $ ./greedly <config_path> <output_path> [<timeout>]
 $ ./greedly public/example.js public/example.atom 1500
 ```
 
-Note that due to the lack of any fault tolerance or logging, it's recommended to use a supervisor such as [forever](https://github.com/foreverjs/forever).
+Note that due to the lack of any fault tolerance or logging, it's recommended to use a supervisor such as [pm2](https://github.com/Unitech/pm2).

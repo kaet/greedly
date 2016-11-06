@@ -67,7 +67,7 @@ class AtomFeed {
 
   build (root, data) {
     for (let field in data) {
-      let [value, construct] = data[field]
+      let [construct, value] = data[field]
 
       if (!value) continue
       if (value instanceof Error) throw value
