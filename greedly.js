@@ -32,7 +32,6 @@ class Feed {
 
   _data (obj) {
     let item = { updated: new Date }
-
     let concat = ''
     for (let field in obj) {
       concat += obj[field]
@@ -58,7 +57,7 @@ class Feed {
         } catch (err) {
           let string = rule.format
           for (let i in value) {
-            string = string.replace('%' + i, value[i])
+            string = string.replace(new RegExp('%' + i, 'g'), value[i])
           }
           value = [string]
         }
@@ -68,6 +67,7 @@ class Feed {
     }
     item.delay = item.updated - Date.now()
     item.publish = item.delay <= 0 ? true : false
+    console.log(item);
 
     if (item.publish) this.cache.push(item.md5)
     this.item(item)
