@@ -3,18 +3,22 @@
 const Manager = require('./greedly.js').Manager
     , fs = require('fs')
     , path = require('path')
+    , minimist = require('minimist')
 
-let [,, config, output, timeout] = process.argv
+let argv = minimist(process.argv.slice(2))
 
 let callback = feed => {
-  fs.writeFileSync(path.resolve(output), feed.atom)
+  fs.writeFileSync(path.resolve(argv.o), feed.atom)
 }
-config = require(path.resolve(config))
+config = require(path.resolve(argv.i))
+if (argv.verbose) {
+  config.logger = console.log
+}
 
 let instance = new Manager(config)
   .data(callback)
   .start()
 
-if (timeout) {
-  setTimeout(instance.stop.bind(instance), timeout)
+if (argv.t) {
+  setTimeout(instance.stop.bind(instance), argv.t)
 }

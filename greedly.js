@@ -32,6 +32,7 @@ class Feed {
 
   _data (obj) {
     let item = { updated: new Date }
+
     let concat = ''
     for (let field in obj) {
       concat += obj[field]
@@ -67,7 +68,6 @@ class Feed {
     }
     item.delay = item.updated - Date.now()
     item.publish = item.delay <= 0 ? true : false
-    console.log(item);
 
     if (item.publish) this.cache.push(item.md5)
     this.item(item)
@@ -109,6 +109,7 @@ class Manager {
 
   constructor (opts) {
     this.opts = opts
+    this.logger = opts.logger
     this.feed = new Feed(opts)
     this.cbs = [this._delay.bind(this)]
     this.sched = later.parse.text(opts.fetch)
@@ -132,6 +133,8 @@ class Manager {
   }
 
   _fetch () {
+    if (this.logger) this.logger(Date())
+
     let callback = obj => {
       for (let cb of this.cbs) cb(obj)
     }
@@ -141,6 +144,7 @@ class Manager {
 
   _delay (feed) {
     for (let item of feed.items) {
+      if (this.logger) this.logger(item)
       if (item.publish) continue
 
       let next = later.schedule(this.sched)
