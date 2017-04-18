@@ -1,24 +1,17 @@
 #!/usr/bin/env node
 
-const Manager = require('./greedly.js').Manager
+const greedly = require('./greedly')
     , fs = require('fs')
     , path = require('path')
     , minimist = require('minimist')
 
-let argv = minimist(process.argv.slice(2))
+const argv = minimist(process.argv.slice(2))
+const config = require(path.resolve(argv.i))
+if (argv.verbose) config.logger = console.log
 
-let callback = feed => {
-  fs.writeFileSync(path.resolve(argv.o), feed.atom)
-}
-config = require(path.resolve(argv.i))
-if (argv.verbose) {
-  config.logger = console.log
-}
-
-let instance = new Manager(config)
+const callback = feed => fs.writeFileSync(path.resolve(argv.o), feed.atom)
+const instance = new greedly.Manager(config)
   .data(callback)
   .start()
 
-if (argv.t) {
-  setTimeout(instance.stop.bind(instance), argv.t)
-}
+if (argv.t) setTimeout(instance.stop.bind(instance), argv.t)
